@@ -1,9 +1,14 @@
 import { Button, Label, TextInput } from 'flowbite-react'
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 
 export default function SignUp() {
+  const [formData, setFormData] = useState({});
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]:e.target.value });
+  }
+  
   return (
     <div className='min-h-screen mt-20'>
       <div className='flex p-3 max-w-4xl mx-auto flex-col md:flex-row md:items-center gap-5'>
@@ -19,21 +24,23 @@ export default function SignUp() {
           </p>
         </div>
         <div className='flex-1'>
-          <form className='flex flex-col gap-4'>
+          <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
             <div className=''>
               <Label htmlFor='user' value='Tên'/>
               <TextInput
                 type='text'
                 placeholder='Tên'
                 id='username'
+                onChange={handleChange}
               />
             </div>
             <div className=''>
               <Label htmlFor='email' value='Email'/>
               <TextInput
-                type='text'
+                type='email'
                 placeholder='Email'
                 id='email'
+                onChange={handleChange}
               />
             </div>
             <div className=''>
@@ -42,6 +49,7 @@ export default function SignUp() {
                 type='password'
                 placeholder='Mật khẩu'
                 id='password'
+                onChange={handleChange}
               />
             </div>
             <Button gradientDuoTone='purpleToPink' type='submit'>
