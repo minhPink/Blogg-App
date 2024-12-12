@@ -1,12 +1,42 @@
-import { Button, Label, TextInput } from 'flowbite-react'
+import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigete = useNavigate();
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]:e.target.value });
+    setFormData({ ...formData, [e.target.id]:e.target.value.trim() });
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.username || !formData.email || !formData.password) {
+      return setErrorMessage('Vui lòng điền vào thư mục này!')
+    }
+    try {
+      setLoading(true);
+      setErrorMessage(null);
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        return setErrorMessage(data.message);
+      }
+      setLoading(false);
+      if (res.ok) {
+        navigete('/sign-in');
+      }
+    } catch (error) {
+      setErrorMessage(error.message);
+      setLoading(false);
+    }
   }
   
   return (
@@ -52,8 +82,17 @@ export default function SignUp() {
                 onChange={handleChange}
               />
             </div>
-            <Button gradientDuoTone='purpleToPink' type='submit'>
-              Đăng ký 
+            <Button gradientDuoTone='purpleToPink' type='submit' disabled={loading}>
+              {
+                loading ? (
+                  <>
+                    <Spinner aria-label="Small spinner example" size="sm" />
+                    <span className='pl-3'>Loading...</span>
+                  </>
+                ) : (
+                  'Đăng ký'
+                )
+              }
             </Button>
           </form>
           <div className='flex gap-2 mt-5'>
@@ -62,6 +101,13 @@ export default function SignUp() {
               Đăng nhập
             </Link>
           </div>
+          {
+            errorMessage && (
+              <Alert className='mt-5' color='failure'>
+                {errorMessage}
+              </Alert>
+            )
+          }
         </div>
       </div>
     </div>
