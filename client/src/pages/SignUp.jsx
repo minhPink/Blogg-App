@@ -15,7 +15,7 @@ export default function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.username || !formData.email || !formData.password) {
-      return setErrorMessage('Vui lòng điền vào thư mục này!')
+      return setErrorMessage('Vui lòng điền thông tin!')
     }
     try {
       setLoading(true);
