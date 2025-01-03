@@ -6,7 +6,7 @@ import {
   signInStart,
   signInSuccess,
   signInFailure,
-} from "../redux/user.js/userSlice";
+} from "../redux/user/userSlice";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
