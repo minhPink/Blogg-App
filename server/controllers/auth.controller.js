@@ -61,3 +61,10 @@ module.exports.signin = async (req, res, next) => {
     next(error);
   }
 };
+
+module.exports.google = async (req, res, next) => {
+  const { email, name, googlePhotoUrl } = req.body;
+  try {
+    const user = await User.findOne({ email });
+  } catch (error) {}
+};
